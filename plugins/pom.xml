@@ -90,6 +90,8 @@
         <module>hbase</module>
         <module>openwhisk</module>
         <module>node-js</module>
+        <module>log4j2</module>
+        <module>ons</module>
     </modules>
 
     <dependencyManagement>
