@@ -2,7 +2,7 @@ package com.navercorp.pinpoint.plugin.alimq.annotation;
 
 import com.navercorp.pinpoint.common.trace.AnnotationKey;
 import com.navercorp.pinpoint.common.trace.AnnotationKeyMatcher;
-import com.navercorp.pinpoint.common.util.*;
+import com.navercorp.pinpoint.common.util.AnnotationKeyUtils;
 
 public final class AnnotationKeyMatchers
 {

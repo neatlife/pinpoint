@@ -1,25 +1,26 @@
 package com.navercorp.pinpoint.plugin.alimq.interceptor;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.*;
+import com.aliyun.openservices.shade.com.alibaba.rocketmq.common.message.MessageExt;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
+import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.alimq.AliWareMQConstants;
 import com.navercorp.pinpoint.plugin.alimq.AliWareMQHeader;
+import com.navercorp.pinpoint.plugin.alimq.RequestTrace;
+import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
 import com.navercorp.pinpoint.plugin.alimq.annotation.AnnotationKey;
 import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQConsumerEntryMethodDescriptor;
 import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
-import com.navercorp.pinpoint.plugin.aliware.mq.descriptor.*;
-import com.navercorp.pinpoint.plugin.aliware.mq.field.getter.*;
-import com.aliyun.openservices.shade.com.alibaba.rocketmq.common.message.*;
-import com.navercorp.pinpoint.common.util.*;
-
-import java.lang.reflect.*;
-import com.navercorp.pinpoint.bootstrap.plugin.*;
-import java.util.*;
-import com.navercorp.pinpoint.bootstrap.plugin.arms.*;
-import com.navercorp.pinpoint.bootstrap.context.*;
-import com.navercorp.pinpoint.plugin.aliware.mq.*;
 import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceReader;
+import com.navercorp.pinpoint.plugin.alimq.TraceContext;
+import com.navercorp.pinpoint.plugin.alimq.MethodDescriptor;
+import com.navercorp.pinpoint.plugin.alimq.Trace;
+import com.navercorp.pinpoint.plugin.alimq.SpanEventRecorder;
+import com.navercorp.pinpoint.plugin.alimq.SpanRecorder;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor
 {
@@ -149,7 +150,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName, (short)0);
+            recorder.recordParentApplication(parentApplicationName);
         }
     }
     

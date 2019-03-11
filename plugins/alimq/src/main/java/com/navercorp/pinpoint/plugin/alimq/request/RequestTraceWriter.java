@@ -2,8 +2,10 @@ package com.navercorp.pinpoint.plugin.alimq.request;
 
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.bootstrap.plugin.arms.*;
-import com.navercorp.pinpoint.bootstrap.context.*;
+import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
+import com.navercorp.pinpoint.plugin.alimq.Trace;
+import com.navercorp.pinpoint.plugin.alimq.TraceContext;
+import com.navercorp.pinpoint.plugin.alimq.TraceId;
 
 public class RequestTraceWriter
 {

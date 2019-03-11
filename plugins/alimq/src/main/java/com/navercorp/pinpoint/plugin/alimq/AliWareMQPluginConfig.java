@@ -1,6 +1,6 @@
 package com.navercorp.pinpoint.plugin.alimq;
 
-import com.navercorp.pinpoint.bootstrap.config.*;
+import com.navercorp.pinpoint.bootstrap.config.ProfilerConfig;
 
 public class AliWareMQPluginConfig
 {

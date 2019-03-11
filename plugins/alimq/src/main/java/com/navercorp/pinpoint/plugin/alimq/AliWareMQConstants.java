@@ -1,6 +1,8 @@
 package com.navercorp.pinpoint.plugin.alimq;
 
-import com.navercorp.pinpoint.common.trace.*;
+import com.navercorp.pinpoint.common.trace.ServiceType;
+import com.navercorp.pinpoint.common.trace.ServiceTypeFactory;
+import com.navercorp.pinpoint.common.trace.ServiceTypeProperty;
 
 public final class AliWareMQConstants
 {

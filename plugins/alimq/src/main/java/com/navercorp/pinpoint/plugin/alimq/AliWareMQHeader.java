@@ -1,8 +1,9 @@
 package com.navercorp.pinpoint.plugin.alimq;
 
-import java.util.*;
-import com.navercorp.pinpoint.bootstrap.context.*;
-import com.navercorp.pinpoint.common.util.*;
+import com.navercorp.pinpoint.bootstrap.context.Header;
+import com.navercorp.pinpoint.common.util.StringUtils;
+
+import java.util.Map;
 
 public class AliWareMQHeader
 {

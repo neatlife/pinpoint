@@ -1,6 +1,7 @@
 package com.navercorp.pinpoint.plugin.alimq;
 
-import com.navercorp.pinpoint.common.trace.*;
+import com.navercorp.pinpoint.common.trace.TraceMetadataProvider;
+import com.navercorp.pinpoint.common.trace.TraceMetadataSetupContext;
 
 public class AliWareMQTraceMetadataProvider implements TraceMetadataProvider
 {

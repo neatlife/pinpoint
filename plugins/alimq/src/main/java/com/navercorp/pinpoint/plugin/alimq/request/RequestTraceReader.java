@@ -2,10 +2,12 @@ package com.navercorp.pinpoint.plugin.alimq.request;
 
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.common.util.*;
-import com.navercorp.pinpoint.bootstrap.plugin.arms.*;
-import com.navercorp.pinpoint.bootstrap.context.*;
-import com.navercorp.pinpoint.bootstrap.sampler.*;
+import com.navercorp.pinpoint.bootstrap.sampler.SamplingFlagUtils;
+import com.navercorp.pinpoint.common.util.Assert;
+import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
+import com.navercorp.pinpoint.plugin.alimq.Trace;
+import com.navercorp.pinpoint.plugin.alimq.TraceContext;
+import com.navercorp.pinpoint.plugin.alimq.TraceId;
 
 public class RequestTraceReader
 {
@@ -30,7 +32,7 @@ public class RequestTraceReader
         final boolean sampling = this.samplingEnable(requestTrace);
         final TraceId traceId = this.populateTraceIdFromRequest(requestTrace);
         if (traceId != null) {
-            final Trace trace = this.traceContext.continueTraceObject(traceId);
+            final Trace trace = this.traceContext.continueTraceObject(traceId, true);
             if (trace.canSampled()) {
                 if (this.isDebug) {
                     this.logger.debug("TraceID exist. continue trace. traceId:{}", (Object)traceId);

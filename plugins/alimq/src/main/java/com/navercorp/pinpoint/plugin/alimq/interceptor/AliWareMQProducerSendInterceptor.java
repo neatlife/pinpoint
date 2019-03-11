@@ -1,21 +1,17 @@
 package com.navercorp.pinpoint.plugin.alimq.interceptor;
 
-import com.navercorp.pinpoint.bootstrap.interceptor.*;
+import com.aliyun.openservices.ons.api.Message;
+import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.plugin.alimq.AliWareMQConstants;
+import com.navercorp.pinpoint.common.util.StringUtils;
+import com.navercorp.pinpoint.plugin.alimq.*;
 import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQProducerEntryMethodDescriptor;
 import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
-import com.navercorp.pinpoint.plugin.aliware.mq.descriptor.*;
-import com.aliyun.openservices.ons.api.*;
-import com.navercorp.pinpoint.bootstrap.plugin.*;
-import com.navercorp.pinpoint.bootstrap.plugin.arms.*;
-import com.navercorp.pinpoint.plugin.aliware.mq.*;
-import com.navercorp.pinpoint.bootstrap.context.*;
-import com.navercorp.pinpoint.plugin.aliware.mq.field.getter.*;
-import com.navercorp.pinpoint.common.util.*;
-import java.util.*;
 import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceWriter;
+
+import java.util.Enumeration;
+import java.util.Properties;
 
 public class AliWareMQProducerSendInterceptor implements AroundInterceptor
 {

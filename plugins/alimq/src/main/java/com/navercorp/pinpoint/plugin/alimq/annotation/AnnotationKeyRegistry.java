@@ -1,8 +1,12 @@
 package com.navercorp.pinpoint.plugin.alimq.annotation;
 
 import com.navercorp.pinpoint.common.trace.AnnotationKey;
-import com.navercorp.pinpoint.common.util.apache.*;
-import java.util.*;
+import com.navercorp.pinpoint.common.util.apache.IntHashMap;
+import com.navercorp.pinpoint.common.util.apache.IntHashMapUtils;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 public class AnnotationKeyRegistry
 {

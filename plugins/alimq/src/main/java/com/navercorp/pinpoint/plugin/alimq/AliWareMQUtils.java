@@ -1,7 +1,10 @@
 package com.navercorp.pinpoint.plugin.alimq;
 
-import com.navercorp.pinpoint.common.plugin.util.*;
-import java.net.*;
+import com.navercorp.pinpoint.common.plugin.util.HostAndPort;
+
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 public class AliWareMQUtils
 {

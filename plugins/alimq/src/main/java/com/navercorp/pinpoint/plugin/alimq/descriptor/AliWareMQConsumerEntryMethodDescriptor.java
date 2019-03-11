@@ -1,6 +1,6 @@
 package com.navercorp.pinpoint.plugin.alimq.descriptor;
 
-import com.navercorp.pinpoint.bootstrap.context.*;
+import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 
 public class AliWareMQConsumerEntryMethodDescriptor implements MethodDescriptor
 {
