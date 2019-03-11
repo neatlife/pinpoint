@@ -23,7 +23,8 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
     public AliWareMQPlugin() {
         this.logger = PLoggerFactory.getLogger((Class)this.getClass());
     }
-    
+
+    @Override
     public void setup(final ProfilerPluginSetupContext context) {
         final ProfilerConfig profilerConfig = context.getConfig();
         if (!profilerConfig.isProfileEnable()) {
@@ -43,18 +44,18 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ProducerImpl", (TransformCallback)new TransformCallback() {
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
-                target.addGetter("AliWareMQPropertiesGetter", "properties");
+                target.addGetter("com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter", "properties");
                 final InstrumentMethod sendHandle = target.getDeclaredMethod("send", new String[] { "com.aliyun.openservices.ons.api.Message" });
                 if (sendHandle != null) {
-                    sendHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendHandle.addInterceptor("com.navercorp.pinpoint.plugin.alimq.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 final InstrumentMethod sendOnewayHandle = target.getDeclaredMethod("sendOneway", new String[] { "com.aliyun.openservices.ons.api.Message" });
                 if (sendOnewayHandle != null) {
-                    sendOnewayHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendOnewayHandle.addInterceptor("com.navercorp.pinpoint.plugin.alimq.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 final InstrumentMethod sendAsyncHandle = target.getDeclaredMethod("sendAsync", new String[] { "com.aliyun.openservices.ons.api.Message", "com.aliyun.openservices.ons.api.SendCallback" });
                 if (sendAsyncHandle != null) {
-                    sendAsyncHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendAsyncHandle.addInterceptor("com.navercorp.pinpoint.plugin.alimq.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 return target.toBytecode();
             }
@@ -63,7 +64,9 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
     
     private void addConsumerEditor() {
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ConsumerImpl", (TransformCallback)new TransformCallback() {
-            public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
+
+            @Override
+            public byte[] doInTransform(com.navercorp.pinpoint.bootstrap.instrument.Instrumentor instrumentor, ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
                 target.addGetter("AliWareMQPropertiesGetter", "properties");
                 return target.toBytecode();
@@ -71,22 +74,24 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
         });
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ConsumerImpl$MessageListenerImpl", (TransformCallback)new TransformCallback() {
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
+                byte[] result;
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
                 final InstrumentMethod onsCientReceiveHandle = target.getDeclaredMethod("consumeMessage", new String[] { "java.util.List", "com.aliyun.openservices.shade.com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext" });
                 if (onsCientReceiveHandle != null) {
-                    onsCientReceiveHandle.addInterceptor("AliWareMQConsumerReceiveInterceptor");
+                    onsCientReceiveHandle.addInterceptor("com.navercorp.pinpoint.plugin.alimq.interceptor.AliWareMQConsumerReceiveInterceptor");
                     return target.toBytecode();
                 }
                 final InstrumentMethod pandoraReceiveHandle = target.getDeclaredMethod("consumeMessage", new String[] { "java.util.List", "com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext" });
                 if (pandoraReceiveHandle != null) {
-                    pandoraReceiveHandle.addInterceptor("PandoraMQConsumerReceiveInterceptor");
+                    pandoraReceiveHandle.addInterceptor("com.navercorp.pinpoint.plugin.alimq.interceptor.PandoraMQConsumerReceiveInterceptor");
                     return target.toBytecode();
                 }
                 return target.toBytecode();
             }
         });
     }
-    
+
+    @Override
     public void setTransformTemplate(final TransformTemplate transformTemplate) {
         this.transformTemplate = transformTemplate;
     }

@@ -1,11 +1,14 @@
 package com.navercorp.pinpoint.plugin.alimq.interceptor;
 
 import com.aliyun.openservices.ons.api.Message;
+import com.navercorp.pinpoint.bootstrap.context.*;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
-import com.navercorp.pinpoint.plugin.alimq.*;
+import com.navercorp.pinpoint.plugin.alimq.AliWareMQConstants;
+import com.navercorp.pinpoint.plugin.alimq.RequestTrace;
+import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
 import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQProducerEntryMethodDescriptor;
 import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
 import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceWriter;
@@ -22,7 +25,7 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor
     private final MethodDescriptor descriptor;
     private volatile boolean isFirst;
     private RequestTraceWriter requestTraceWriter;
-    
+
     public AliWareMQProducerSendInterceptor(final TraceContext traceContext, final MethodDescriptor descriptor) {
         this.logger = PLoggerFactory.getLogger((Class)this.getClass());
         this.isDebug = this.logger.isDebugEnabled();

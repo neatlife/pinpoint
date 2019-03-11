@@ -1,6 +1,7 @@
 package com.navercorp.pinpoint.plugin.alimq.interceptor;
 
 import com.aliyun.openservices.shade.com.alibaba.rocketmq.common.message.MessageExt;
+import com.navercorp.pinpoint.bootstrap.context.*;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
@@ -13,11 +14,6 @@ import com.navercorp.pinpoint.plugin.alimq.annotation.AnnotationKey;
 import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQConsumerEntryMethodDescriptor;
 import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
 import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceReader;
-import com.navercorp.pinpoint.plugin.alimq.TraceContext;
-import com.navercorp.pinpoint.plugin.alimq.MethodDescriptor;
-import com.navercorp.pinpoint.plugin.alimq.Trace;
-import com.navercorp.pinpoint.plugin.alimq.SpanEventRecorder;
-import com.navercorp.pinpoint.plugin.alimq.SpanRecorder;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -150,7 +146,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName);
+            recorder.recordParentApplication(parentApplicationName, (short) 0);
         }
     }
     

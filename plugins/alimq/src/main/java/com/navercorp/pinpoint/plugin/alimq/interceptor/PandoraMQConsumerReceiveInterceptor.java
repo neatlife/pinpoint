@@ -1,11 +1,15 @@
 package com.navercorp.pinpoint.plugin.alimq.interceptor;
 
 import com.aliyun.openservices.shade.com.alibaba.rocketmq.common.message.MessageExt;
+import com.navercorp.pinpoint.bootstrap.context.*;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
-import com.navercorp.pinpoint.plugin.alimq.*;
+import com.navercorp.pinpoint.plugin.alimq.AliWareMQConstants;
+import com.navercorp.pinpoint.plugin.alimq.AliWareMQHeader;
+import com.navercorp.pinpoint.plugin.alimq.RequestTrace;
+import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
 import com.navercorp.pinpoint.plugin.alimq.annotation.AnnotationKey;
 import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQConsumerEntryMethodDescriptor;
 import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
@@ -142,7 +146,7 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName);
+            recorder.recordParentApplication(parentApplicationName, (short)0);
         }
     }
     
