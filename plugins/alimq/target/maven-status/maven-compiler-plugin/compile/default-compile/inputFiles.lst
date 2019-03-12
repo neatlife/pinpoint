@@ -8,7 +8,6 @@
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/RequestTrace.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/descriptor/AliWareMQProducerEntryMethodDescriptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKey.java
-/Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/AliWareMQUtils.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKeyMatchers.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/descriptor/AliWareMQConsumerEntryMethodDescriptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/Header.java
@@ -21,8 +20,8 @@
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/field/getter/AliWareMQPropertiesGetter.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/interceptor/AliWareMQConsumerReceiveInterceptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/arms/PinPonitCodec.java
+/Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/AlimqPluginConfig.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/request/RequestTraceWriter.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/arms/RequestTraceProxy.java
-/Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/AliWareMQPluginConfig.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/arms/RequestTraceCodec.java
 /Users/suxiaolin/Projects/pinpoint/plugins/alimq/src/main/java/com/navercorp/pinpoint/plugin/alimq/interceptor/PandoraMQConsumerReceiveInterceptor.java

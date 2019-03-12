@@ -43,7 +43,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor
             outerField.setAccessible(true);
             final Object consumerTarget = outerField.get(target);
             final Properties consumerProperties = ((AliWareMQPropertiesGetter)consumerTarget)._$PINPOINT$_getProperties();
-            final String onsAddr = consumerProperties.getProperty("ONSAddr", "");
+            final String onsAddr = consumerProperties.getProperty("NAMESRV_ADDR", "");
             final List<MessageExt> msgsRMQList = (List<MessageExt>)args[0];
             final MessageExt msgRMQ = msgsRMQList.get(0);
             final Map<String, String> properties = (msgRMQ.getProperties());

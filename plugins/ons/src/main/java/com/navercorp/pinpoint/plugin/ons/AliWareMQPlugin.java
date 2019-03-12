@@ -38,19 +38,19 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
             @Override
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
-                target.addGetter("AliWareMQPropertiesGetter", "properties");
+                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.getter.AliWareMQPropertiesGetter", "properties");
                 final InstrumentMethod sendHandle = target.getDeclaredMethod("send", new String[] { "com.aliyun.openservices.ons.api.Message" });
                 if (sendHandle != null) {
 
-                    sendHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 final InstrumentMethod sendOnewayHandle = target.getDeclaredMethod("sendOneway", new String[] { "com.aliyun.openservices.ons.api.Message" });
                 if (sendOnewayHandle != null) {
-                    sendOnewayHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendOnewayHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 final InstrumentMethod sendAsyncHandle = target.getDeclaredMethod("sendAsync", new String[] { "com.aliyun.openservices.ons.api.Message", "com.aliyun.openservices.ons.api.SendCallback" });
                 if (sendAsyncHandle != null) {
-                    sendAsyncHandle.addInterceptor("AliWareMQProducerSendInterceptor");
+                    sendAsyncHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.AliWareMQProducerSendInterceptor");
                 }
                 return target.toBytecode();
             }
@@ -65,7 +65,7 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
             @Override
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
-                target.addGetter("AliWareMQPropertiesGetter", "properties");
+                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.getter.AliWareMQPropertiesGetter", "properties");
                 return target.toBytecode();
             }
         });
@@ -75,12 +75,12 @@ public class AliWareMQPlugin implements ProfilerPlugin, TransformTemplateAware
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
                 final InstrumentMethod onsCientReceiveHandle = target.getDeclaredMethod("consumeMessage", new String[] { "java.util.List", "com.aliyun.openservices.shade.com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext" });
                 if (onsCientReceiveHandle != null) {
-                    onsCientReceiveHandle.addInterceptor("AliWareMQConsumerReceiveInterceptor");
+                    onsCientReceiveHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.AliWareMQConsumerReceiveInterceptor");
                     return target.toBytecode();
                 }
                 final InstrumentMethod pandoraReceiveHandle = target.getDeclaredMethod("consumeMessage", new String[] { "java.util.List", "com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext" });
                 if (pandoraReceiveHandle != null) {
-                    pandoraReceiveHandle.addInterceptor("PandoraMQConsumerReceiveInterceptor");
+                    pandoraReceiveHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.PandoraMQConsumerReceiveInterceptor");
                     return target.toBytecode();
                 }
                 return target.toBytecode();

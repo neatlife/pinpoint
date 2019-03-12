@@ -1,12 +1,11 @@
 package com.navercorp.pinpoint.plugin.alimq.annotation;
 
-public class DefaultAnnotationKey implements AnnotationKey
-{
+public class DefaultAnnotationKey implements AnnotationKey {
     private final int code;
     private final String name;
     private final boolean viewInRecordSet;
     private final boolean errorApiMetadata;
-    
+
     DefaultAnnotationKey(final int code, final String name, final AnnotationKeyProperty... properties) {
         this.code = code;
         this.name = name;
@@ -27,27 +26,27 @@ public class DefaultAnnotationKey implements AnnotationKey
         this.viewInRecordSet = viewInRecordSet;
         this.errorApiMetadata = errorApiMetadata;
     }
-    
+
     @Override
     public String getName() {
         return this.name;
     }
-    
+
     @Override
     public int getCode() {
         return this.code;
     }
-    
+
     @Override
     public boolean isErrorApiMetadata() {
         return this.errorApiMetadata;
     }
-    
+
     @Override
     public boolean isViewInRecordSet() {
         return this.viewInRecordSet;
     }
-    
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AnnotationKey{");

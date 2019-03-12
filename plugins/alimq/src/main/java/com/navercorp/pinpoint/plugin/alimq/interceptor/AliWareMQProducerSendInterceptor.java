@@ -16,9 +16,13 @@ import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceWriter;
 import java.util.Enumeration;
 import java.util.Properties;
 
-public class AliWareMQProducerSendInterceptor implements AroundInterceptor
-{
+public class AliWareMQProducerSendInterceptor implements AroundInterceptor {
     private static final AliWareMQProducerEntryMethodDescriptor PRODUCER_ENTRY_METHOD_DESCRIPTOR;
+
+    static {
+        PRODUCER_ENTRY_METHOD_DESCRIPTOR = new AliWareMQProducerEntryMethodDescriptor();
+    }
+
     private final PLogger logger;
     private final boolean isDebug;
     private final TraceContext traceContext;
@@ -27,67 +31,71 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor
     private RequestTraceWriter requestTraceWriter;
 
     public AliWareMQProducerSendInterceptor(final TraceContext traceContext, final MethodDescriptor descriptor) {
-        this.logger = PLoggerFactory.getLogger((Class)this.getClass());
+        this.logger = PLoggerFactory.getLogger(this.getClass());
         this.isDebug = this.logger.isDebugEnabled();
         this.isFirst = false;
         this.requestTraceWriter = null;
         this.traceContext = traceContext;
         this.descriptor = descriptor;
-        traceContext.cacheApi((MethodDescriptor)AliWareMQProducerSendInterceptor.PRODUCER_ENTRY_METHOD_DESCRIPTOR);
+        traceContext.cacheApi(AliWareMQProducerSendInterceptor.PRODUCER_ENTRY_METHOD_DESCRIPTOR);
         this.requestTraceWriter = new RequestTraceWriter(this.traceContext);
+        logger.warn("AliWareMQProducerSendInterceptor constructor running");
     }
-    
+
     private void inject(final Trace trace, final Message message) {
+        logger.warn("AliWareMQProducerSendInterceptor inject running");
         final TraceId nextId = trace.getTraceId().getNextTraceId();
-        final RequestTraceProxy requestTrace = new RequestTraceProxy((RequestTrace)new RequestTrace() {
+        final RequestTraceProxy requestTrace = new RequestTraceProxy(new RequestTrace() {
             public String getHeader(final String name) {
                 return null;
             }
-            
+
             public void setHeader(final String key, final String name) {
                 message.putUserProperties(key, name);
             }
-            
+
             public Enumeration getHeaderNames() {
                 return null;
             }
         });
         this.requestTraceWriter.write(requestTrace, trace, nextId);
     }
-    
+
     private Trace createTrace(final Message message) throws Throwable {
+        logger.warn("AliWareMQProducerSendInterceptor createTrace running");
         Trace trace = this.traceContext.currentRawTraceObject();
         try {
             if (trace == null) {
                 trace = this.traceContext.newTraceObject();
             }
+            logger.warn("trace.canSampled(): {}", trace.canSampled());
             if (trace.canSampled()) {
                 final SpanRecorder recorder = trace.getSpanRecorder();
                 recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_SEND);
-                recorder.recordApi((MethodDescriptor)AliWareMQProducerSendInterceptor.PRODUCER_ENTRY_METHOD_DESCRIPTOR);
+                recorder.recordApi(AliWareMQProducerSendInterceptor.PRODUCER_ENTRY_METHOD_DESCRIPTOR);
                 recorder.recordEndPoint("");
                 recorder.recordRemoteAddress("");
                 recorder.recordRpcName("Send Topic@" + message.getTopic());
             }
-        }
-        catch (Throwable t) {
-            this.logger.warn("BEFORE. Cause:{}", (Object)t.getMessage(), (Object)t);
+        } catch (Throwable t) {
+            this.logger.warn("BEFORE. Cause:{}", t.getMessage(), t);
         }
         return trace;
     }
-    
+
     public void before(final Object target, final Object[] args) {
+        logger.warn("AliWareMQProducerSendInterceptor before running");
         if (this.isDebug) {
             this.logger.beforeInterceptor(target, args);
         }
         try {
-            final Message message = (Message)args[0];
+            final Message message = (Message) args[0];
             Trace trace = this.traceContext.currentTraceObject();
+            logger.warn("AliWareMQProducerSendInterceptor before running, trace {} message {}", trace, message);
             if (trace == null) {
                 trace = this.createTrace(message);
                 this.isFirst = true;
-            }
-            else {
+            } else {
                 this.isFirst = false;
             }
             this.inject(trace, message);
@@ -99,15 +107,15 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor
             }
             final SpanEventRecorder recorder = trace.traceBlockBegin();
             recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_SEND);
-        }
-        catch (Throwable th) {
+        } catch (Throwable th) {
             if (this.logger.isWarnEnabled()) {
-                this.logger.warn("BEFORE. Caused:{}", (Object)th.getMessage(), (Object)th);
+                this.logger.warn("BEFORE. Caused:{}", th.getMessage(), th);
             }
         }
     }
-    
+
     public void after(final Object target, final Object[] args, final Object result, final Throwable throwable) {
+        logger.warn("AliWareMQProducerSendInterceptor after running");
         if (this.isDebug) {
             this.logger.afterInterceptor(target, args);
         }
@@ -116,14 +124,13 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor
             return;
         }
         try {
-            final Message message = (Message)args[0];
-            final Properties properties = ((AliWareMQPropertiesGetter)target)._$PINPOINT$_getProperties();
+            final Message message = (Message) args[0];
+            final Properties properties = ((AliWareMQPropertiesGetter) target)._$PINPOINT$_getProperties();
             final String onsAddr = properties.getProperty("ONSAddr", "");
             final SpanEventRecorder recorder = trace.currentSpanEventRecorder();
             if (!StringUtils.isEmpty(onsAddr)) {
                 recorder.recordDestinationId(onsAddr + "@" + message.getTopic());
-            }
-            else {
+            } else {
                 recorder.recordDestinationId(message.getTopic());
             }
             recorder.recordApi(this.descriptor);
@@ -131,23 +138,16 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor
             if (throwable != null) {
                 recorder.recordException(throwable);
             }
-        }
-        catch (Throwable t) {
-            this.logger.warn("AFTER error. Cause:{}", (Object)t.getMessage(), (Object)t);
-        }
-        finally {
+        } catch (Throwable t) {
+            this.logger.warn("AFTER error. Cause:{}", t.getMessage(), t);
+        } finally {
             if (this.isFirst) {
                 this.traceContext.removeTraceObject();
                 trace.traceBlockEnd();
                 trace.close();
-            }
-            else {
+            } else {
                 trace.traceBlockEnd();
             }
         }
-    }
-    
-    static {
-        PRODUCER_ENTRY_METHOD_DESCRIPTOR = new AliWareMQProducerEntryMethodDescriptor();
     }
 }

@@ -18,25 +18,31 @@ import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceReader;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
-{
+public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
     private static final AliWareMQConsumerEntryMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
+
+    static {
+        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new AliWareMQConsumerEntryMethodDescriptor();
+    }
+
     private final PLogger logger;
     private final boolean isDebug;
     private final TraceContext traceContext;
     private final MethodDescriptor methodDescriptor;
     private final RequestTraceReader requestTraceReader;
-    
+
     public PandoraMQConsumerReceiveInterceptor(final TraceContext traceContext, final MethodDescriptor methodDescriptor) {
-        this.logger = PLoggerFactory.getLogger((Class)this.getClass());
+        this.logger = PLoggerFactory.getLogger(this.getClass());
         this.isDebug = this.logger.isDebugEnabled();
         this.traceContext = traceContext;
         this.methodDescriptor = methodDescriptor;
-        traceContext.cacheApi((MethodDescriptor)PandoraMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
+        traceContext.cacheApi(PandoraMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
         this.requestTraceReader = new RequestTraceReader(this.traceContext);
+        logger.warn("PandoraMQConsumerReceiveInterceptor contructor running");
     }
-    
+
     public void before(final Object target, final Object[] args) {
+        logger.warn("PandoraMQConsumerReceiveInterceptor before running");
         if (this.isDebug) {
             this.logger.beforeInterceptor(target, args);
         }
@@ -44,11 +50,11 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
             final Field outerField = target.getClass().getDeclaredField("this$0");
             outerField.setAccessible(true);
             final Object consumerTarget = outerField.get(target);
-            final Properties consumerProperties = ((AliWareMQPropertiesGetter)consumerTarget)._$PINPOINT$_getProperties();
+            final Properties consumerProperties = ((AliWareMQPropertiesGetter) consumerTarget)._$PINPOINT$_getProperties();
             final String onsAddr = consumerProperties.getProperty("ONSAddr", "");
-            final List<MessageExt> msgsRMQList = (List<MessageExt>)args[0];
+            final List<MessageExt> msgsRMQList = (List<MessageExt>) args[0];
             final MessageExt msgRMQ = msgsRMQList.get(0);
-            final Map<String, String> properties = (Map<String, String>)msgRMQ.getProperties();
+            final Map<String, String> properties = msgRMQ.getProperties();
             final Trace trace = this.createTrace(properties, msgRMQ, onsAddr);
             if (trace == null) {
                 return;
@@ -60,21 +66,20 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
             recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_RECV);
             if (!StringUtils.isEmpty(onsAddr)) {
                 recorder.recordEndPoint(onsAddr + "@" + msgRMQ.getTopic());
-            }
-            else {
+            } else {
                 recorder.recordEndPoint(msgRMQ.getTopic());
             }
             final long delay = System.currentTimeMillis() - msgRMQ.getBornTimestamp();
-            recorder.recordAttribute(AnnotationKey.ALIWARE_MQ_CONSUMER_DELAY, (Object)delay);
-        }
-        catch (Throwable th) {
+            recorder.recordAttribute(AnnotationKey.ALIWARE_MQ_CONSUMER_DELAY, delay);
+        } catch (Throwable th) {
             if (this.logger.isInfoEnabled()) {
-                this.logger.info("BEFORE. Caused:{}", (Object)th.getMessage(), (Object)th);
+                this.logger.warn("BEFORE. Caused:{}", th.getMessage(), th);
             }
         }
     }
-    
+
     public void after(final Object target, final Object[] args, final Object result, final Throwable throwable) {
+        logger.warn("PandoraMQConsumerReceiveInterceptor after running");
         if (this.isDebug) {
             this.logger.afterInterceptor(target, args, result, throwable);
         }
@@ -92,28 +97,27 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
             if (throwable != null) {
                 recorder.recordException(throwable);
             }
-        }
-        catch (Throwable th) {
+        } catch (Throwable th) {
             if (this.logger.isInfoEnabled()) {
-                this.logger.info("after. Caused:{}", (Object)th.getMessage(), (Object)th);
+                this.logger.warn("after. Caused:{}", th.getMessage(), th);
             }
-        }
-        finally {
+        } finally {
             this.traceContext.removeTraceObject();
             trace.traceBlockEnd();
             trace.close();
         }
     }
-    
+
     private Trace createTrace(final Map<String, String> properties, final MessageExt msgRMQ, final String onsAddr) throws Throwable {
-        final RequestTraceProxy requestTrace = new RequestTraceProxy((RequestTrace)new RequestTrace() {
+        logger.warn("PandoraMQConsumerReceiveInterceptor createTrace running");
+        final RequestTraceProxy requestTrace = new RequestTraceProxy(new RequestTrace() {
             public String getHeader(final String name) {
                 return properties.get(name);
             }
-            
+
             public void setHeader(final String key, final String name) {
             }
-            
+
             public Enumeration getHeaderNames() {
                 final Vector v = new Vector();
                 if (properties != null && properties.size() > 0) {
@@ -131,14 +135,14 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
         }
         return trace;
     }
-    
+
     private void recordRootSpan(final Map<String, String> properties, final SpanRecorder recorder, final MessageExt messageExt, final String onsAddr) {
+        logger.warn("PandoraMQConsumerReceiveInterceptor recordRootSpan running");
         recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_RECV);
-        recorder.recordApi((MethodDescriptor)PandoraMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
+        recorder.recordApi(PandoraMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
         if (!StringUtils.isEmpty(onsAddr)) {
             recorder.recordEndPoint(onsAddr + "@" + messageExt.getTopic());
-        }
-        else {
+        } else {
             recorder.recordEndPoint(messageExt.getTopic());
         }
         recorder.recordRemoteAddress(messageExt.getBornHostString());
@@ -146,11 +150,7 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName, (short)0);
+            recorder.recordParentApplication(parentApplicationName, (short) 0);
         }
-    }
-    
-    static {
-        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new AliWareMQConsumerEntryMethodDescriptor();
     }
 }

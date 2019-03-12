@@ -6,11 +6,10 @@ import com.navercorp.pinpoint.bootstrap.context.TraceContext;
 import com.navercorp.pinpoint.bootstrap.context.TraceId;
 import com.navercorp.pinpoint.plugin.alimq.RequestTrace;
 
-public interface RequestTraceCodec
-{
+public interface RequestTraceCodec {
     void inject(final TraceContext p0, final RequestTrace p1, final Trace p2, final TraceId p3);
-    
+
     TraceId extract(final TraceContext p0, final RequestTrace p1);
-    
+
     String getSamplingFlag(final RequestTrace p0);
 }

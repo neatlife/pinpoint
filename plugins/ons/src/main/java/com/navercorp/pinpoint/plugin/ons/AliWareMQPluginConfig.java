@@ -7,7 +7,7 @@ public class AliWareMQPluginConfig
     private final boolean aliWareMQEnable;
     
     public AliWareMQPluginConfig(final ProfilerConfig config) {
-        this.aliWareMQEnable = config.readBoolean("profiler.aliWareMQ.enable", true);
+        this.aliWareMQEnable = config.readBoolean("profiler.ons.enable", true);
     }
     
     public boolean isAliWareMQEnable() {
