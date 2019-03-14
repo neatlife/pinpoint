@@ -10,7 +10,7 @@ import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
 import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
-import com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter;
+import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
 
 import java.lang.reflect.Field;
 import java.util.List;

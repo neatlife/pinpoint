@@ -8,7 +8,7 @@ import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
 import com.navercorp.pinpoint.plugin.ons.method.OnsProducerMethodDescriptor;
-import com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter;
+import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
 
 import java.util.Properties;
 

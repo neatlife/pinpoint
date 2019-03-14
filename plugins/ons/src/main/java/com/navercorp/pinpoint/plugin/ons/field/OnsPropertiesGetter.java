@@ -1,4 +1,4 @@
-package com.navercorp.pinpoint.plugin.ons.field.getter;
+package com.navercorp.pinpoint.plugin.ons.field;
 
 import java.util.Properties;
 
