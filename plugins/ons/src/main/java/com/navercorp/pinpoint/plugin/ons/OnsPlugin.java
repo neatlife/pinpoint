@@ -44,7 +44,7 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ProducerImpl", new TransformCallback() {
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
-                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter", "properties");
+                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter", "properties");
                 final InstrumentMethod sendHandle = target.getDeclaredMethod("send", "com.aliyun.openservices.ons.api.Message");
                 if (sendHandle != null) {
                     sendHandle.addInterceptor("com.navercorp.pinpoint.plugin.ons.interceptor.OnsProducerSendInterceptor");
@@ -69,7 +69,7 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
             @Override
             public byte[] doInTransform(Instrumentor instrumentor, ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
-                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter", "properties");
+                target.addGetter("com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter", "properties");
                 return target.toBytecode();
             }
         });

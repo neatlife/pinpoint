@@ -10,4 +10,5 @@ com/navercorp/pinpoint/plugin/ons/OnsPlugin$1.class
 com/navercorp/pinpoint/plugin/ons/method/OnsConsumerMethodDescriptor.class
 com/navercorp/pinpoint/plugin/ons/constant/AnnotationKeyConstant.class
 com/navercorp/pinpoint/plugin/ons/OnsTraceMetadataProvider.class
+com/navercorp/pinpoint/plugin/ons/util/ParameterUtil.class
 com/navercorp/pinpoint/plugin/ons/OnsPlugin.class

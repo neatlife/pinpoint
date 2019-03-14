@@ -9,6 +9,7 @@ import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
 import com.navercorp.pinpoint.plugin.ons.method.OnsProducerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
+import com.navercorp.pinpoint.plugin.ons.util.ParameterUtil;
 
 import java.util.Properties;
 
@@ -33,28 +34,10 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
         logger.warn("OnsProducerSendInterceptor constructor running");
     }
 
-    private void inject(final Trace trace, final Message message) {
-        logger.warn("OnsProducerSendInterceptor inject running");
-        final TraceId nextId = trace.getTraceId().getNextTraceId();
-
-        message.putUserProperties(Header.HTTP_TRACE_ID.toString(), nextId.getTransactionId());
-        message.putUserProperties(Header.HTTP_SPAN_ID.toString(), String.valueOf(nextId.getSpanId()));
-        message.putUserProperties(Header.HTTP_PARENT_SPAN_ID.toString(), String.valueOf(nextId.getParentSpanId()));
-        message.putUserProperties(Header.HTTP_PARENT_APPLICATION_NAME.toString(), traceContext.getApplicationName());
-        message.putUserProperties(Header.HTTP_PARENT_APPLICATION_TYPE.toString(), Short.toString(traceContext.getServerTypeCode()));
-        message.putUserProperties(Header.HTTP_FLAGS.toString(), String.valueOf(nextId.getFlags()));
-
-        final boolean sampling = trace.canSampled();
-        logger.warn("sampling: {}", sampling);
-        if (!sampling) {
-            this.logger.warn("set Sampling flag=false");
-            message.putUserProperties(Header.HTTP_SAMPLED.toString(), "0");
-        }
-    }
-
     private Trace createTrace(final Message message) throws Throwable {
         logger.warn("OnsProducerSendInterceptor createTrace running");
-        Trace trace = this.traceContext.currentRawTraceObject();
+//        Trace trace = this.traceContext.currentRawTraceObject();
+        Trace trace = ParameterUtil.extract(traceContext, message.getUserProperties());
         try {
             if (trace == null) {
                 trace = this.traceContext.newTraceObject();
@@ -87,7 +70,7 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
             } else {
                 this.isFirst = false;
             }
-            this.inject(trace, message);
+//            ParameterUtil.inject(traceContext, trace, message);
             if (!trace.canSampled()) {
                 return;
             }

@@ -5,12 +5,12 @@ import com.navercorp.pinpoint.bootstrap.context.*;
 import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
-import com.navercorp.pinpoint.bootstrap.util.NumberUtils;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
 import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
+import com.navercorp.pinpoint.plugin.ons.util.ParameterUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -48,7 +48,16 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
             final List<MessageExt> msgsRMQList = (List<MessageExt>) args[0];
             final MessageExt msgRMQ = msgsRMQList.get(0);
             final Map<String, String> properties = msgRMQ.getProperties();
-            final Trace trace = this.createTrace(properties, msgRMQ, onsAddr);
+//            final Trace trace = ParameterUtil.extract(traceContext, properties, msgRMQ, onsAddr);
+            Trace trace = traceContext.currentTraceObject();
+            if (trace == null) {
+                trace = traceContext.newTraceObject();
+            }
+            ParameterUtil.inject(traceContext, trace, msgRMQ.getProperties());
+            if (trace.canSampled()) {
+                final SpanRecorder recorder = trace.getSpanRecorder();
+                this.recordRootSpan(properties, recorder, msgRMQ, onsAddr);
+            }
             logger.warn("OnsConsumerReceiveInterceptor before running, trace: {}, canSampled: {}, onsAddr: {}, properties: {}", trace, trace.canSampled(), onsAddr, properties);
             if (!trace.canSampled()) {
                 return;
@@ -93,35 +102,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
             trace.traceBlockEnd();
             trace.close();
         }
-    }
-
-    private Trace createTrace(final Map<String, String> properties, final MessageExt msgRMQ, final String onsAddr) throws Throwable {
-        logger.warn("OnsConsumerReceiveInterceptor createTrace running");
-        this.logger.warn("TraceContext {}", traceContext.getAgentId());
-        this.logger.warn("META_TRACE_ID {}", properties.get(Header.HTTP_TRACE_ID.toString()));
-        this.logger.warn("META_PARENT_SPAN_ID {}", properties.get(Header.HTTP_PARENT_SPAN_ID.toString()));
-        this.logger.warn("META_SPAN_ID {}", properties.get(Header.HTTP_SPAN_ID.toString()));
-
-        final String traceId = properties.get(Header.HTTP_TRACE_ID.toString());
-        final Trace trace;
-        if (traceId == null) {
-            trace = traceContext.newTraceObject();
-        } else {
-            final TraceId id = traceContext.createTraceId(
-                    traceId,
-                    NumberUtils.parseLong(properties.get(Header.HTTP_PARENT_SPAN_ID.toString()), -1L),
-                    NumberUtils.parseLong(properties.get(Header.HTTP_SPAN_ID.toString()), -1L),
-                    NumberUtils.parseShort(properties.get(Header.HTTP_FLAGS.toString()), (short) -1)
-            );
-            this.logger.warn("TraceID exist. continue trace. {}", id);
-            trace = this.traceContext.continueTraceObject(id);
-        }
-        logger.warn("OnsConsumerReceiveInterceptor createTrace, trace: {}, canSampled {}", trace, trace.canSampled());
-        if (trace.canSampled()) {
-            final SpanRecorder recorder = trace.getSpanRecorder();
-            this.recordRootSpan(properties, recorder, msgRMQ, onsAddr);
-        }
-        return trace;
     }
 
     private void recordRootSpan(final Map<String, String> properties, final SpanRecorder recorder, final MessageExt messageExt, final String onsAddr) {
