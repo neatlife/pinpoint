@@ -32,7 +32,7 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
         }
         final OnsPluginConfig config = new OnsPluginConfig(context.getConfig());
         if (!config.isOnsEnable()) {
-            this.logger.warn("profiler.aliWareMQ.enable: false, OnsPlugin disabled");
+            this.logger.warn("profiler.ons.enable: false, OnsPlugin disabled");
             return;
         }
         this.addProducerEditor();

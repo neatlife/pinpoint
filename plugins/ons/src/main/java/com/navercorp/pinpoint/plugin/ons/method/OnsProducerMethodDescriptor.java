@@ -48,7 +48,7 @@ public class OnsProducerMethodDescriptor implements MethodDescriptor {
     }
 
     public String getApiDescriptor() {
-        return "AliWareMQ Producer Invocation";
+        return "Ons Producer Invocation";
     }
 
     public int getType() {

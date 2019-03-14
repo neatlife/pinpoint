@@ -87,9 +87,6 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
                 this.isFirst = false;
             }
             this.inject(trace, message);
-            if (trace == null) {
-                return;
-            }
             if (!trace.canSampled()) {
                 return;
             }

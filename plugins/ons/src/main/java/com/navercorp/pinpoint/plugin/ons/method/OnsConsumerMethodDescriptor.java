@@ -48,7 +48,7 @@ public class OnsConsumerMethodDescriptor implements MethodDescriptor {
     }
 
     public String getApiDescriptor() {
-        return "AliWareMQ Consumer Invocation";
+        return "Ons Consumer Invocation";
     }
 
     public int getType() {
