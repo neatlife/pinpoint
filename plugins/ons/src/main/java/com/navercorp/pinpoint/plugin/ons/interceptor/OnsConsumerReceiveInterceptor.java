@@ -8,8 +8,8 @@ import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
-import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
+import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.util.ParameterUtil;
 
 import java.lang.reflect.Field;
@@ -48,7 +48,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
             final List<MessageExt> msgsRMQList = (List<MessageExt>) args[0];
             final MessageExt msgRMQ = msgsRMQList.get(0);
             final Map<String, String> properties = msgRMQ.getProperties();
-//            final Trace trace = ParameterUtil.extract(traceContext, properties, msgRMQ, onsAddr);
             Trace trace = traceContext.currentTraceObject();
             if (trace == null) {
                 trace = traceContext.newTraceObject();
