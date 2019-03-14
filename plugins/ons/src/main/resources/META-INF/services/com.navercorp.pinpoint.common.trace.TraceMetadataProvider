@@ -1,1 +1,1 @@
-com.navercorp.pinpoint.plugin.ons.OnsMQTraceMetadataProvider
+com.navercorp.pinpoint.plugin.ons.OnsTraceMetadataProvider

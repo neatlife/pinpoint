@@ -1,10 +1,10 @@
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/OnsTraceMetadataProvider.java
+/Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/descriptor/OnsConsumerMethodDescriptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/interceptor/OnsProducerSendInterceptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/interceptor/OnsConsumerReceiveInterceptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/OnsPlugin.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/field/getter/OnsPropertiesGetter.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/constant/AnnotationKeyConstant.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/constant/ServiceTypeConstants.java
+/Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/descriptor/OnsProducerMethodDescriptor.java
 /Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/OnsPluginConfig.java
-/Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/descriptor/OnsProducerEntryMethodDescriptor.java
-/Users/suxiaolin/Projects/pinpoint/plugins/ons/src/main/java/com/navercorp/pinpoint/plugin/ons/descriptor/OnsConsumerEntryMethodDescriptor.java

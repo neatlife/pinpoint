@@ -1,4 +1,4 @@
-package com.navercorp.pinpoint.plugin.ons.descriptor;
+package com.navercorp.pinpoint.plugin.ons.method;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 

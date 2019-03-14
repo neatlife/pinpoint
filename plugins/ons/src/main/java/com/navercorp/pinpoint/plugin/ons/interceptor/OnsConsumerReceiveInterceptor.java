@@ -9,7 +9,7 @@ import com.navercorp.pinpoint.bootstrap.util.NumberUtils;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
-import com.navercorp.pinpoint.plugin.ons.descriptor.OnsConsumerMethodDescriptor;
+import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter;
 
 import java.lang.reflect.Field;
@@ -107,15 +107,15 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
 
         final String traceId = properties.get(Header.HTTP_TRACE_ID.toString());
         final Trace trace;
-        if (traceId != null) {
+        if (traceId == null) {
             trace = traceContext.newTraceObject();
         } else {
-            final long parentSpanID = NumberUtils.parseLong(properties.get(Header.HTTP_PARENT_SPAN_ID.toString()), -1L);
-
-            final long spanID = NumberUtils.parseLong(properties.get(Header.HTTP_SPAN_ID.toString()), -1L);
-            final short flags = NumberUtils.parseShort(properties.get(Header.HTTP_FLAGS.toString()), (short) -1);
-
-            final TraceId id = traceContext.createTraceId(traceId, parentSpanID, spanID, flags);  //createTraceId(traceId,parentSpanID,spanID,(short)0);
+            final TraceId id = traceContext.createTraceId(
+                    traceId,
+                    NumberUtils.parseLong(properties.get(Header.HTTP_PARENT_SPAN_ID.toString()), -1L),
+                    NumberUtils.parseLong(properties.get(Header.HTTP_SPAN_ID.toString()), -1L),
+                    NumberUtils.parseShort(properties.get(Header.HTTP_FLAGS.toString()), (short) -1)
+            );
             this.logger.warn("TraceID exist. continue trace. {}", id);
             trace = this.traceContext.continueTraceObject(id);
         }
