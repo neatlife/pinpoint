@@ -7,16 +7,16 @@ import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
-import com.navercorp.pinpoint.plugin.ons.descriptor.OnsProducerEntryMethodDescriptor;
+import com.navercorp.pinpoint.plugin.ons.descriptor.OnsProducerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter;
 
 import java.util.Properties;
 
 public class OnsProducerSendInterceptor implements AroundInterceptor {
-    private static final OnsProducerEntryMethodDescriptor PRODUCER_ENTRY_METHOD_DESCRIPTOR;
+    private static final OnsProducerMethodDescriptor PRODUCER_ENTRY_METHOD_DESCRIPTOR;
 
     static {
-        PRODUCER_ENTRY_METHOD_DESCRIPTOR = new OnsProducerEntryMethodDescriptor();
+        PRODUCER_ENTRY_METHOD_DESCRIPTOR = new OnsProducerMethodDescriptor();
     }
 
     private final PLogger logger;

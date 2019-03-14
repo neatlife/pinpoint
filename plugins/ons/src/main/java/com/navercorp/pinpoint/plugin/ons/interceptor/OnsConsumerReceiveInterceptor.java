@@ -9,7 +9,7 @@ import com.navercorp.pinpoint.bootstrap.util.NumberUtils;
 import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
-import com.navercorp.pinpoint.plugin.ons.descriptor.OnsConsumerEntryMethodDescriptor;
+import com.navercorp.pinpoint.plugin.ons.descriptor.OnsConsumerMethodDescriptor;
 import com.navercorp.pinpoint.plugin.ons.field.getter.OnsPropertiesGetter;
 
 import java.lang.reflect.Field;
@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Properties;
 
 public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
-    private static final OnsConsumerEntryMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
+    private static final OnsConsumerMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
 
     static {
-        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new OnsConsumerEntryMethodDescriptor();
+        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new OnsConsumerMethodDescriptor();
     }
 
     private final PLogger logger;
