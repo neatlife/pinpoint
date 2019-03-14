@@ -1,13 +1,13 @@
 com/navercorp/pinpoint/plugin/ons/OnsPluginConfig.class
 com/navercorp/pinpoint/plugin/ons/OnsPlugin$3.class
 com/navercorp/pinpoint/plugin/ons/constant/ServiceTypeConstants.class
+com/navercorp/pinpoint/plugin/ons/method/OnsProduceMethod.class
 com/navercorp/pinpoint/plugin/ons/OnsPlugin$2.class
 com/navercorp/pinpoint/plugin/ons/interceptor/OnsConsumerReceiveInterceptor.class
 com/navercorp/pinpoint/plugin/ons/field/OnsPropertiesGetter.class
 com/navercorp/pinpoint/plugin/ons/interceptor/OnsProducerSendInterceptor.class
-com/navercorp/pinpoint/plugin/ons/method/OnsProducerMethodDescriptor.class
+com/navercorp/pinpoint/plugin/ons/method/OnsConsumeMethod.class
 com/navercorp/pinpoint/plugin/ons/OnsPlugin$1.class
-com/navercorp/pinpoint/plugin/ons/method/OnsConsumerMethodDescriptor.class
 com/navercorp/pinpoint/plugin/ons/constant/AnnotationKeyConstant.class
 com/navercorp/pinpoint/plugin/ons/OnsTraceMetadataProvider.class
 com/navercorp/pinpoint/plugin/ons/util/ParameterUtil.class
