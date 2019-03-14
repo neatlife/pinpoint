@@ -56,14 +56,14 @@ public class PinPonitCodec implements RequestTraceCodec {
         this.logger.warn("META_PARENT_SPAN_ID {}", requestTrace.getHeader(META_PARENT_SPAN_ID));
         this.logger.warn("META_SPAN_ID {}", requestTrace.getHeader(META_SPAN_ID));
 
-
         final String traceId = requestTrace.getHeader(META_TRACE_ID);
         if (traceId != null) {
             final long parentSpanID = NumberUtils.parseLong(requestTrace.getHeader(META_PARENT_SPAN_ID), -1L);
 
             final long spanID = NumberUtils.parseLong(requestTrace.getHeader(META_SPAN_ID), -1L);
+            final short flags = NumberUtils.parseShort(requestTrace.getHeader(META_FLAGS), (short) -1);
 
-            final TraceId id = traceContext.createTraceId(traceId, parentSpanID, spanID, (short) 0);  //createTraceId(traceId,parentSpanID,spanID,(short)0);
+            final TraceId id = traceContext.createTraceId(traceId, parentSpanID, spanID, flags);  //createTraceId(traceId,parentSpanID,spanID,(short)0);
             this.logger.warn("TraceID exist. continue trace. {}", id);
             return id;
         }

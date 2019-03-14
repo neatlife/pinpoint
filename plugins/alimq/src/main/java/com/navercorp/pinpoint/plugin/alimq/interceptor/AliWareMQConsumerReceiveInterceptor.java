@@ -57,7 +57,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor {
             final MessageExt msgRMQ = msgsRMQList.get(0);
             final Map<String, String> properties = msgRMQ.getProperties();
             final Trace trace = this.createTrace(properties, msgRMQ, onsAddr);
-            logger.warn("AliWareMQConsumerReceiveInterceptor before running, trace: {}, canSampled: {}, onsAddr: {}", trace, trace.canSampled(), onsAddr);
+            logger.warn("AliWareMQConsumerReceiveInterceptor before running, trace: {}, canSampled: {}, onsAddr: {}, properties: {}", trace, trace.canSampled(), onsAddr, properties);
             if (trace == null) {
                 return;
             }
@@ -73,6 +73,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor {
             }
             final long delay = System.currentTimeMillis() - msgRMQ.getBornTimestamp();
             recorder.recordAttribute(AnnotationKey.ALIWARE_MQ_CONSUMER_DELAY, delay);
+            logger.warn("AliWareMQConsumerReceiveInterceptor before running, ending");
         } catch (Throwable th) {
             this.logger.warn("AliWareMQConsumerReceiveInterceptor BEFORE. Caused:{}", th.getMessage(), th);
         }
@@ -110,31 +111,29 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor {
 
     private Trace createTrace(final Map<String, String> properties, final MessageExt msgRMQ, final String onsAddr) throws Throwable {
         logger.warn("AliWareMQConsumerReceiveInterceptor createTrace running");
-//        final RequestTraceProxy requestTrace = new RequestTraceProxy(new RequestTrace() {
-//            public String getHeader(final String name) {
-//                return properties.get(name);
-//            }
-//
-//            public void setHeader(final String key, final String name) {
-//            }
-//
-//            public Enumeration getHeaderNames() {
-//                final Vector v = new Vector();
-//                if (properties != null && properties.size() > 0) {
-//                    for (final Map.Entry<String, String> entry : properties.entrySet()) {
-//                        v.add(entry.getKey());
-//                    }
-//                }
-//                return v.elements();
-//            }
-//        });
-//        final Trace trace = this.requestTraceReader.read(requestTrace);
-        //final Trace trace = this.traceContext.currentTraceObject();
-        //final Trace trace = this.traceContext.currentRawTraceObject();
-        Trace trace = this.traceContext.currentRawTraceObject();
-        if (trace == null) {
-            trace = this.traceContext.newTraceObject();
-        }
+        final RequestTraceProxy requestTrace = new RequestTraceProxy(new RequestTrace() {
+            public String getHeader(final String name) {
+                return properties.get(name);
+            }
+
+            public void setHeader(final String key, final String name) {
+                logger.warn("AliWareMQConsumerReceiveInterceptor setheader key {} name {}", key, name);
+                properties.put(key, name);
+            }
+
+            public Enumeration getHeaderNames() {
+                final Vector v = new Vector();
+                if (properties != null && properties.size() > 0) {
+                    for (final Map.Entry<String, String> entry : properties.entrySet()) {
+                        v.add(entry.getKey());
+                    }
+                }
+                return v.elements();
+            }
+        });
+        // final Trace trace = this.requestTraceReader.read(requestTrace);
+        final Trace trace = traceContext.newTraceObject();
+        logger.warn("AliWareMQConsumerReceiveInterceptor createTrace, trace: {}, canSampled {}", trace, trace.canSampled());
         if (trace.canSampled()) {
             final SpanRecorder recorder = trace.getSpanRecorder();
             this.recordRootSpan(properties, recorder, msgRMQ, onsAddr);
@@ -144,7 +143,7 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor {
 
     private void recordRootSpan(final Map<String, String> properties, final SpanRecorder recorder, final MessageExt messageExt, final String onsAddr) {
         logger.warn("AliWareMQConsumerReceiveInterceptor recordRootSpan running");
-        recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_RECV);
+        recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_CILENT);
         recorder.recordApi(AliWareMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
         if (!StringUtils.isEmpty(onsAddr)) {
             recorder.recordEndPoint(onsAddr + "@" + messageExt.getTopic());
@@ -157,7 +156,8 @@ public class AliWareMQConsumerReceiveInterceptor implements AroundInterceptor {
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         logger.warn("parentApplicationame {}", parentApplicationName);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName, (short) 0);
+            logger.warn("AliWareMQConsumerReceiveInterceptor applicationType {}", AliWareMQHeader.getParentApplicationType(properties));
+            recorder.recordParentApplication(parentApplicationName, AliWareMQHeader.getParentApplicationType(properties));
         }
     }
 }

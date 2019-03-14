@@ -14,6 +14,7 @@ com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKeyMatchers.class
 com/navercorp/pinpoint/plugin/alimq/AlimqPluginConfig.class
 com/navercorp/pinpoint/plugin/alimq/arms/PinPonitCodec.class
 com/navercorp/pinpoint/plugin/alimq/RequestTraceProxy.class
+com/navercorp/pinpoint/plugin/alimq/interceptor/AliWareMQConsumerReceiveInterceptor$1.class
 com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKeyMatchers$ExactMatcher.class
 com/navercorp/pinpoint/plugin/alimq/AliWareMQConstants.class
 com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKeyMatchers$2.class
@@ -27,8 +28,6 @@ com/navercorp/pinpoint/plugin/alimq/AliWareMQPlugin$2.class
 com/navercorp/pinpoint/plugin/alimq/request/RequestTraceWriter.class
 com/navercorp/pinpoint/plugin/alimq/interceptor/PandoraMQConsumerReceiveInterceptor.class
 com/navercorp/pinpoint/plugin/alimq/interceptor/AliWareMQProducerSendInterceptor.class
-org.codehaus.plexus.compiler.javac.JavacCompiler1152902350353119376arguments
-javac.sh
 com/navercorp/pinpoint/plugin/alimq/annotation/AnnotationKeyRegistry$Builder.class
 com/navercorp/pinpoint/plugin/alimq/annotation/DefaultAnnotationKeyFactory.class
 com/navercorp/pinpoint/plugin/alimq/annotation/DefaultAnnotationKey.class

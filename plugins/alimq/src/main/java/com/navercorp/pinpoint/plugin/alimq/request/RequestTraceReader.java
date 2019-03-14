@@ -30,12 +30,15 @@ public class RequestTraceReader {
         Assert.requireNonNull((Object) requestTrace, "requestTrace must not be n ull");
         final boolean sampling = this.samplingEnable(requestTrace);
         final TraceId traceId = this.populateTraceIdFromRequest(requestTrace);
+        logger.warn("RequestTraceReader read, traceid {}", traceId);
         if (traceId != null) {
             final Trace trace = this.traceContext.continueTraceObject(traceId);
+            logger.warn("RequestTraceReader read, traceid {} trace {}", traceId, trace);
             if (trace.canSampled()) {
                 this.logger.warn("TraceID exist. continue trace. traceId:{}", traceId);
+            } else {
+                this.logger.warn("TraceID exist. camSampled is false. skip trace. traceId:{}", traceId);
             }
-            this.logger.warn("TraceID exist. camSampled is false. skip trace. traceId:{}", traceId);
             return trace;
         }
         final Trace trace = this.newTrace();

@@ -150,7 +150,8 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            recorder.recordParentApplication(parentApplicationName, (short) 0);
+            logger.warn("PandoraMQConsumerReceiveInterceptor applicationType {}", AliWareMQHeader.getParentApplicationType(properties));
+            recorder.recordParentApplication(parentApplicationName, AliWareMQHeader.getParentApplicationType(properties));
         }
     }
 }

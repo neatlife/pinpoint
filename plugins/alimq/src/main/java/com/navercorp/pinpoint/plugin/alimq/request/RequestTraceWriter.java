@@ -19,9 +19,7 @@ public class RequestTraceWriter {
     }
 
     public void write(final RequestTraceProxy requestTrace, final Trace trace, final TraceId nextId) {
-        if (this.isDebug) {
-            this.logger.warn("Set request header that is not to be sampled.");
-        }
+        this.logger.warn("Set request header that is not to be sampled.");
         requestTrace.inject(this.traceContext, trace, nextId);
     }
 }

@@ -47,7 +47,7 @@ public class AliWareMQProducerSendInterceptor implements AroundInterceptor {
         final TraceId nextId = trace.getTraceId().getNextTraceId();
         final RequestTraceProxy requestTrace = new RequestTraceProxy(new RequestTrace() {
             public String getHeader(final String name) {
-                return null;
+                return message.getUserProperties(name);
             }
 
             public void setHeader(final String key, final String name) {

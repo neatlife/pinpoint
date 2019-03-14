@@ -13,4 +13,9 @@ public class AliWareMQHeader {
         }
         return defaultValue;
     }
+
+    public static short getParentApplicationType(final Map<String, String> properties) {
+        final short parentApplicationType = Short.valueOf(properties.get(Header.HTTP_PARENT_APPLICATION_TYPE.toString()));
+        return parentApplicationType;
+    }
 }

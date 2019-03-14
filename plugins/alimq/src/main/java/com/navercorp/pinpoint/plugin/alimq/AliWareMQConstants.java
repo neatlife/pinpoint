@@ -7,10 +7,12 @@ import com.navercorp.pinpoint.common.trace.ServiceTypeProperty;
 public final class AliWareMQConstants {
     public static final ServiceType ALIWARE_MQ_SEND;
     public static final ServiceType ALIWARE_MQ_RECV;
+    public static final ServiceType ALIWARE_MQ_CILENT;
     public static final String BLANK_ADDRESS = "";
 
     static {
         ALIWARE_MQ_SEND = ServiceTypeFactory.of(8410, "ALIWARE_MQ_SEND", ServiceTypeProperty.QUEUE, ServiceTypeProperty.RECORD_STATISTICS);
         ALIWARE_MQ_RECV = ServiceTypeFactory.of(8420, "ALIWARE_MQ_RECV", ServiceTypeProperty.QUEUE, ServiceTypeProperty.RECORD_STATISTICS);
+        ALIWARE_MQ_CILENT = ServiceTypeFactory.of(8430, "ALIWARE_MQ_CILENT", ServiceTypeProperty.QUEUE, ServiceTypeProperty.RECORD_STATISTICS);
     }
 }
