@@ -2,11 +2,11 @@ package com.navercorp.pinpoint.plugin.alimq.descriptor;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 
-public class AliWareMQProducerEntryMethodDescriptor implements MethodDescriptor {
+public class OnsMQConsumerEntryMethodDescriptor implements MethodDescriptor {
     private int apiId;
     private int type;
 
-    public AliWareMQProducerEntryMethodDescriptor() {
+    public OnsMQConsumerEntryMethodDescriptor() {
         this.apiId = 0;
         this.type = 100;
     }
@@ -36,7 +36,7 @@ public class AliWareMQProducerEntryMethodDescriptor implements MethodDescriptor 
     }
 
     public String getFullName() {
-        return AliWareMQProducerEntryMethodDescriptor.class.getName();
+        return OnsMQConsumerEntryMethodDescriptor.class.getName();
     }
 
     public int getApiId() {
@@ -48,7 +48,7 @@ public class AliWareMQProducerEntryMethodDescriptor implements MethodDescriptor 
     }
 
     public String getApiDescriptor() {
-        return "AliWareMQ Producer Invocation";
+        return "AliWareMQ Consumer Invocation";
     }
 
     public int getType() {

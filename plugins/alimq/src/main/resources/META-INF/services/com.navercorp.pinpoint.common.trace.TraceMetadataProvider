@@ -1,1 +1,1 @@
-com.navercorp.pinpoint.plugin.alimq.AliWareMQTraceMetadataProvider
+com.navercorp.pinpoint.plugin.alimq.OnsMQTraceMetadataProvider

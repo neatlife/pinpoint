@@ -2,10 +2,10 @@ package com.navercorp.pinpoint.plugin.alimq;
 
 import com.navercorp.pinpoint.bootstrap.config.ProfilerConfig;
 
-public class AlimqPluginConfig {
+public class OnsPluginConfig {
     private final boolean alimqEnable;
 
-    public AlimqPluginConfig(final ProfilerConfig config) {
+    public OnsPluginConfig(final ProfilerConfig config) {
         this.alimqEnable = config.readBoolean("profiler.alimq.enable", true);
     }
 

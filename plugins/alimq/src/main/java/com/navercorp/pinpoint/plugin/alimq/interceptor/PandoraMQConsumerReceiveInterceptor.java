@@ -6,23 +6,23 @@ import com.navercorp.pinpoint.bootstrap.interceptor.AroundInterceptor;
 import com.navercorp.pinpoint.bootstrap.logging.PLogger;
 import com.navercorp.pinpoint.bootstrap.logging.PLoggerFactory;
 import com.navercorp.pinpoint.common.util.StringUtils;
-import com.navercorp.pinpoint.plugin.alimq.AliWareMQConstants;
-import com.navercorp.pinpoint.plugin.alimq.AliWareMQHeader;
+import com.navercorp.pinpoint.plugin.alimq.OnsMQConstants;
+import com.navercorp.pinpoint.plugin.alimq.OnsMQHeader;
 import com.navercorp.pinpoint.plugin.alimq.RequestTrace;
 import com.navercorp.pinpoint.plugin.alimq.RequestTraceProxy;
 import com.navercorp.pinpoint.plugin.alimq.annotation.AnnotationKey;
-import com.navercorp.pinpoint.plugin.alimq.descriptor.AliWareMQConsumerEntryMethodDescriptor;
-import com.navercorp.pinpoint.plugin.alimq.field.getter.AliWareMQPropertiesGetter;
+import com.navercorp.pinpoint.plugin.alimq.descriptor.OnsMQConsumerEntryMethodDescriptor;
+import com.navercorp.pinpoint.plugin.alimq.field.getter.OnsMQPropertiesGetter;
 import com.navercorp.pinpoint.plugin.alimq.request.RequestTraceReader;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
-    private static final AliWareMQConsumerEntryMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
+    private static final OnsMQConsumerEntryMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
 
     static {
-        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new AliWareMQConsumerEntryMethodDescriptor();
+        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new OnsMQConsumerEntryMethodDescriptor();
     }
 
     private final PLogger logger;
@@ -50,7 +50,7 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
             final Field outerField = target.getClass().getDeclaredField("this$0");
             outerField.setAccessible(true);
             final Object consumerTarget = outerField.get(target);
-            final Properties consumerProperties = ((AliWareMQPropertiesGetter) consumerTarget)._$PINPOINT$_getProperties();
+            final Properties consumerProperties = ((OnsMQPropertiesGetter) consumerTarget)._$PINPOINT$_getProperties();
             final String onsAddr = consumerProperties.getProperty("ONSAddr", "");
             final List<MessageExt> msgsRMQList = (List<MessageExt>) args[0];
             final MessageExt msgRMQ = msgsRMQList.get(0);
@@ -63,7 +63,7 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
                 return;
             }
             final SpanEventRecorder recorder = trace.traceBlockBegin();
-            recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_RECV);
+            recorder.recordServiceType(OnsMQConstants.ALIWARE_MQ_RECV);
             if (!StringUtils.isEmpty(onsAddr)) {
                 recorder.recordEndPoint(onsAddr + "@" + msgRMQ.getTopic());
             } else {
@@ -138,7 +138,7 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
 
     private void recordRootSpan(final Map<String, String> properties, final SpanRecorder recorder, final MessageExt messageExt, final String onsAddr) {
         logger.warn("PandoraMQConsumerReceiveInterceptor recordRootSpan running");
-        recorder.recordServiceType(AliWareMQConstants.ALIWARE_MQ_RECV);
+        recorder.recordServiceType(OnsMQConstants.ALIWARE_MQ_RECV);
         recorder.recordApi(PandoraMQConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
         if (!StringUtils.isEmpty(onsAddr)) {
             recorder.recordEndPoint(onsAddr + "@" + messageExt.getTopic());
@@ -148,10 +148,10 @@ public class PandoraMQConsumerReceiveInterceptor implements AroundInterceptor {
         recorder.recordRemoteAddress(messageExt.getBornHostString());
         recorder.recordRpcName("Recv Topic@" + messageExt.getTopic());
         recorder.recordAcceptorHost(messageExt.getBornHostString());
-        final String parentApplicationName = AliWareMQHeader.getParentApplicationName(properties, null);
+        final String parentApplicationName = OnsMQHeader.getParentApplicationName(properties, null);
         if (parentApplicationName != null) {
-            logger.warn("PandoraMQConsumerReceiveInterceptor applicationType {}", AliWareMQHeader.getParentApplicationType(properties));
-            recorder.recordParentApplication(parentApplicationName, AliWareMQHeader.getParentApplicationType(properties));
+            logger.warn("PandoraMQConsumerReceiveInterceptor applicationType {}", OnsMQHeader.getParentApplicationType(properties));
+            recorder.recordParentApplication(parentApplicationName, OnsMQHeader.getParentApplicationType(properties));
         }
     }
 }

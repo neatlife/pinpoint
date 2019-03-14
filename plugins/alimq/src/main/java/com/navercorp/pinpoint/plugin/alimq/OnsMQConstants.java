@@ -4,7 +4,7 @@ import com.navercorp.pinpoint.common.trace.ServiceType;
 import com.navercorp.pinpoint.common.trace.ServiceTypeFactory;
 import com.navercorp.pinpoint.common.trace.ServiceTypeProperty;
 
-public final class AliWareMQConstants {
+public final class OnsMQConstants {
     public static final ServiceType ALIWARE_MQ_SEND;
     public static final ServiceType ALIWARE_MQ_RECV;
     public static final ServiceType ALIWARE_MQ_CILENT;
