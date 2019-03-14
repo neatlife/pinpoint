@@ -90,8 +90,7 @@
         <module>openwhisk</module>
         <module>node-js</module>
         <module>log4j2</module>
-        <!--<module>ons</module>-->
-        <module>alimq</module>
+        <module>ons</module>
     </modules>
 
     <dependencies>
@@ -390,14 +389,9 @@
             <artifactId>pinpoint-log4j2-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.navercorp.pinpoint</groupId>-->
-            <!--<artifactId>pinpoint-ons-plugin</artifactId>-->
-            <!--<version>${project.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>com.navercorp.pinpoint</groupId>
-            <artifactId>pinpoint-alimq-plugin</artifactId>
+            <artifactId>pinpoint-ons-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
