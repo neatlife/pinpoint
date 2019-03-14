@@ -21,14 +21,14 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
 
     private final PLogger logger;
     private final TraceContext traceContext;
-    private final MethodDescriptor descriptor;
+    private final MethodDescriptor methodDescriptor;
     private volatile boolean isFirst;
 
-    public OnsProducerSendInterceptor(final TraceContext traceContext, final MethodDescriptor descriptor) {
+    public OnsProducerSendInterceptor(final TraceContext traceContext, final MethodDescriptor methodDescriptor) {
         this.logger = PLoggerFactory.getLogger(this.getClass());
         this.isFirst = false;
         this.traceContext = traceContext;
-        this.descriptor = descriptor;
+        this.methodDescriptor = methodDescriptor;
         traceContext.cacheApi(OnsProducerSendInterceptor.PRODUCER_ENTRY_METHOD_DESCRIPTOR);
         logger.warn("OnsProducerSendInterceptor constructor running");
     }
@@ -74,6 +74,7 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
         return trace;
     }
 
+    @Override
     public void before(final Object target, final Object[] args) {
         logger.warn("OnsProducerSendInterceptor before running");
         try {
@@ -100,6 +101,7 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
         }
     }
 
+    @Override
     public void after(final Object target, final Object[] args, final Object result, final Throwable throwable) {
         logger.warn("OnsProducerSendInterceptor after running");
         final Trace trace = this.traceContext.currentTraceObject();
@@ -116,7 +118,7 @@ public class OnsProducerSendInterceptor implements AroundInterceptor {
             } else {
                 recorder.recordDestinationId(message.getTopic());
             }
-            recorder.recordApi(this.descriptor);
+            recorder.recordApi(methodDescriptor);
 //            recorder.recordRpcName("Send Topic@" + message.getTopic());
             if (throwable != null) {
                 recorder.recordException(throwable);

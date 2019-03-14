@@ -50,9 +50,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
             final Map<String, String> properties = msgRMQ.getProperties();
             final Trace trace = this.createTrace(properties, msgRMQ, onsAddr);
             logger.warn("OnsConsumerReceiveInterceptor before running, trace: {}, canSampled: {}, onsAddr: {}, properties: {}", trace, trace.canSampled(), onsAddr, properties);
-            if (trace == null) {
-                return;
-            }
             if (!trace.canSampled()) {
                 return;
             }
