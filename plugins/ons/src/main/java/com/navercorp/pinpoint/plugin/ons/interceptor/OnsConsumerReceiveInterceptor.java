@@ -9,7 +9,7 @@ import com.navercorp.pinpoint.common.util.StringUtils;
 import com.navercorp.pinpoint.plugin.ons.constant.AnnotationKeyConstant;
 import com.navercorp.pinpoint.plugin.ons.constant.ServiceTypeConstants;
 import com.navercorp.pinpoint.plugin.ons.field.OnsPropertiesGetter;
-import com.navercorp.pinpoint.plugin.ons.method.OnsConsumerMethodDescriptor;
+import com.navercorp.pinpoint.plugin.ons.method.OnsConsumeMethod;
 import com.navercorp.pinpoint.plugin.ons.util.ParameterUtil;
 
 import java.lang.reflect.Field;
@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.Properties;
 
 public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
-    private static final OnsConsumerMethodDescriptor CONSUMER_ENTRY_METHOD_DESCRIPTOR;
+    private static final OnsConsumeMethod CONSUMER_ENTRY_METHOD_DESCRIPTOR;
 
     static {
-        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new OnsConsumerMethodDescriptor();
+        CONSUMER_ENTRY_METHOD_DESCRIPTOR = new OnsConsumeMethod();
     }
 
     private final PLogger logger;
@@ -33,12 +33,10 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
         this.traceContext = traceContext;
         this.methodDescriptor = methodDescriptor;
         traceContext.cacheApi(OnsConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
-        logger.warn("OnsConsumerReceiveInterceptor constructor running");
     }
 
     @Override
     public void before(final Object target, final Object[] args) {
-        logger.warn("OnsConsumerReceiveInterceptor before running");
         try {
             final Field outerField = target.getClass().getDeclaredField("this$0");
             outerField.setAccessible(true);
@@ -57,7 +55,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
                 final SpanRecorder recorder = trace.getSpanRecorder();
                 this.recordRootSpan(properties, recorder, msgRMQ, onsAddr);
             }
-            logger.warn("OnsConsumerReceiveInterceptor before running, trace: {}, canSampled: {}, onsAddr: {}, properties: {}", trace, trace.canSampled(), onsAddr, properties);
             if (!trace.canSampled()) {
                 return;
             }
@@ -70,7 +67,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
             }
             final long delay = System.currentTimeMillis() - msgRMQ.getBornTimestamp();
             recorder.recordAttribute(AnnotationKeyConstant.ONS_CONSUMER_DELAY, delay);
-            logger.warn("OnsConsumerReceiveInterceptor before running, ending");
         } catch (Throwable th) {
             this.logger.warn("OnsConsumerReceiveInterceptor BEFORE. Caused:{}", th.getMessage(), th);
         }
@@ -78,9 +74,7 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
 
     @Override
     public void after(final Object target, final Object[] args, final Object result, final Throwable throwable) {
-        logger.warn("OnsConsumerReceiveInterceptor after running");
         final Trace trace = this.traceContext.currentRawTraceObject();
-        logger.warn("OnsConsumerReceiveInterceptor after running, trace: {}", trace);
         if (trace == null) {
             return;
         }
@@ -104,7 +98,6 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
     }
 
     private void recordRootSpan(final Map<String, String> properties, final SpanRecorder recorder, final MessageExt messageExt, final String onsAddr) {
-        logger.warn("OnsConsumerReceiveInterceptor recordRootSpan running");
         recorder.recordApi(OnsConsumerReceiveInterceptor.CONSUMER_ENTRY_METHOD_DESCRIPTOR);
         if (!StringUtils.isEmpty(onsAddr)) {
             recorder.recordEndPoint(onsAddr + "@" + messageExt.getTopic());
@@ -115,9 +108,7 @@ public class OnsConsumerReceiveInterceptor implements AroundInterceptor {
         recorder.recordRpcName("Recv Topic@" + messageExt.getTopic());
         recorder.recordAcceptorHost(messageExt.getBornHostString());
         final String parentApplicationName = properties.get(Header.HTTP_PARENT_APPLICATION_NAME.toString());
-        logger.warn("parentApplicationame {}", parentApplicationName);
         if (parentApplicationName != null) {
-            logger.warn("OnsConsumerReceiveInterceptor applicationType {}", Short.valueOf(properties.get(Header.HTTP_PARENT_APPLICATION_TYPE.toString())));
             recorder.recordParentApplication(parentApplicationName, Short.valueOf(properties.get(Header.HTTP_PARENT_APPLICATION_TYPE.toString())));
         }
     }

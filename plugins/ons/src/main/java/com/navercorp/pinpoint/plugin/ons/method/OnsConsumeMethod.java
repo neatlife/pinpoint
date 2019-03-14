@@ -2,11 +2,11 @@ package com.navercorp.pinpoint.plugin.ons.method;
 
 import com.navercorp.pinpoint.bootstrap.context.MethodDescriptor;
 
-public class OnsProducerMethodDescriptor implements MethodDescriptor {
+public class OnsConsumeMethod implements MethodDescriptor {
     private int apiId;
     private int type;
 
-    public OnsProducerMethodDescriptor() {
+    public OnsConsumeMethod() {
         this.apiId = 0;
         this.type = 100;
     }
@@ -36,7 +36,7 @@ public class OnsProducerMethodDescriptor implements MethodDescriptor {
     }
 
     public String getFullName() {
-        return OnsProducerMethodDescriptor.class.getName();
+        return OnsConsumeMethod.class.getName();
     }
 
     public int getApiId() {
@@ -48,7 +48,7 @@ public class OnsProducerMethodDescriptor implements MethodDescriptor {
     }
 
     public String getApiDescriptor() {
-        return "Ons Producer Invocation";
+        return "Ons Consumer Invocation";
     }
 
     public int getType() {

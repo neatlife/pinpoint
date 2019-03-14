@@ -40,7 +40,6 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
     }
 
     private void addProducerEditor() {
-        logger.warn("add producer editor");
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ProducerImpl", new TransformCallback() {
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
@@ -63,9 +62,7 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
     }
 
     private void addConsumerEditor() {
-        logger.warn("add consumer editor");
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ConsumerImpl", new TransformCallback() {
-
             @Override
             public byte[] doInTransform(Instrumentor instrumentor, ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws InstrumentException {
                 final InstrumentClass target = instrumentor.getInstrumentClass(loader, className, classfileBuffer);
@@ -73,6 +70,7 @@ public class OnsPlugin implements ProfilerPlugin, TransformTemplateAware {
                 return target.toBytecode();
             }
         });
+
         this.transformTemplate.transform("com.aliyun.openservices.ons.api.impl.rocketmq.ConsumerImpl$MessageListenerImpl", new TransformCallback() {
             public byte[] doInTransform(final Instrumentor instrumentor, final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws InstrumentException {
                 byte[] result;
